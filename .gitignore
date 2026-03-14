@@ -1,14 +1,51 @@
-# Datos y Modelos
-data/
-models/*.pkl
-*.csv
+# =============================================================
+# DATOS — Ignorar archivos de datos, NO las carpetas
+# Las carpetas del proyecto deben ser visibles para el equipo.
+# Los archivos de datos son pesados y no deben subirse a Git.
+# =============================================================
+data/raw/*
+data/interim/*
+data/processed/*
 
-# Python
+# Excepciones: mantener los marcadores de carpeta (.gitkeep)
+!data/raw/.gitkeep
+!data/interim/.gitkeep
+!data/processed/.gitkeep
+
+# Ignorar formatos de datos comunes
+*.csv
+*.xlsx
+*.parquet
+*.json
+
+# =============================================================
+# MODELOS ENTRENADOS — Pueden ser muy pesados (>100MB)
+# Se versionan con herramientas como DVC, no con Git directamente.
+# =============================================================
+models/*.pkl
+models/*.joblib
+
+# =============================================================
+# ENTORNO DE PYTHON — Cada desarrollador crea el suyo propio.
+# No tiene sentido subir el entorno virtual de otro.
+# =============================================================
 __pycache__/
 *.pyc
+*.pyo
 .venv/
+venv/
+env/
 .env
 
-# Sistema
+# =============================================================
+# SISTEMA OPERATIVO — Archivos generados automáticamente
+# =============================================================
 .DS_Store
 Thumbs.db
+
+# =============================================================
+# HERRAMIENTAS DE DESARROLLO — IDEs y editores
+# =============================================================
+.vscode/
+.idea/
+.ipynb_checkpoints/

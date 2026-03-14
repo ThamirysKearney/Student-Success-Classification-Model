@@ -1,0 +1,84 @@
+# =============================================================
+# DEPENDENCIAS DEL PROYECTO
+# Student Success Classification Model
+# =============================================================
+# Para instalar todas las dependencias, ejecuta en tu terminal:
+#   pip install -r requirements.txt
+# =============================================================
+# Versiones verificadas y fijadas a partir del entorno de
+# desarrollo local (Python en Windows, Marzo 2026).
+# =============================================================
+
+# -----------------------------------------------
+# MANIPULACIÓN DE DATOS
+# -----------------------------------------------
+# pandas: tabla de datos principal (DataFrames)
+# Es la librería central del proyecto — prácticamente
+# todo el procesado de datos pasa por aquí.
+pandas==2.3.3
+
+# numpy: operaciones matemáticas sobre arrays
+# Pandas y scikit-learn la usan internamente.
+# La declaramos explícitamente para fijar la versión.
+numpy==2.4.2
+
+# -----------------------------------------------
+# FUENTE DE DATOS
+# -----------------------------------------------
+# ucimlrepo: descarga automática del dataset desde
+# el repositorio UCI Machine Learning.
+# Alternativa: descarga manual con requests + CSV local.
+ucimlrepo==0.0.7
+
+# -----------------------------------------------
+# MACHINE LEARNING — Core
+# -----------------------------------------------
+# scikit-learn: algoritmos de clasificación, métricas
+# de evaluación y herramientas de preprocesamiento.
+# Es la librería de ML más usada en Python.
+scikit-learn==1.8.0
+
+# joblib: guardar y cargar modelos entrenados en disco.
+# Scikit-learn la usa internamente; la declaramos
+# explícitamente para dejar clara la intención.
+joblib==1.5.3
+
+# -----------------------------------------------
+# MACHINE LEARNING — Modelos adicionales
+# -----------------------------------------------
+# xgboost: algoritmo de boosting de alta precisión.
+# Lo usaremos para comparar con Random Forest
+# en la fase de evaluación de modelos.
+xgboost==3.1.3
+
+# scipy: funciones estadísticas avanzadas.
+# Útil para tests de hipótesis durante el EDA.
+scipy==1.17.0
+
+# -----------------------------------------------
+# VISUALIZACIÓN
+# -----------------------------------------------
+# matplotlib: librería base de gráficos en Python
+matplotlib==3.10.8
+
+# seaborn: gráficos estadísticos avanzados,
+# construido sobre matplotlib. Más sencillo de usar.
+seaborn==0.13.2
+
+# plotly: gráficos interactivos para el notebook de EDA
+plotly==6.5.2
+
+# -----------------------------------------------
+# CONFIGURACIÓN
+# -----------------------------------------------
+# pyyaml: permite leer archivos .yaml desde Python.
+# Lo usaremos para leer config/config.yaml.
+PyYAML==6.0.3
+
+# -----------------------------------------------
+# TESTING
+# -----------------------------------------------
+# pytest: ejecutar tests automatizados del proyecto.
+# Permite verificar que el código funciona correctamente
+# antes de hacer cambios importantes.
+pytest==9.0.2
