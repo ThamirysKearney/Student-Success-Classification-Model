@@ -1,0 +1,153 @@
+# =============================================================
+# CONFIGURACIÓN CENTRAL DEL PROYECTO
+# Student Success Classification Model
+# =============================================================
+# Este archivo centraliza todos los parámetros configurables
+# del proyecto. Para cambiar cualquier parámetro, edita
+# SOLO este archivo — no toques el código fuente.
+#
+# ¿Por qué YAML y no un config.py?
+# - YAML es más legible para perfiles no técnicos
+# - Permite que un responsable del proyecto ajuste
+#   parámetros sin conocer Python
+# - Es el estándar en proyectos de ML modernos
+#   (MLflow, Hydra, DVC lo usan por defecto)
+# =============================================================
+
+
+# -----------------------------------------------
+# FUENTE DE DATOS
+# -----------------------------------------------
+data_source:
+
+  # ID del dataset en el repositorio UCI Machine Learning
+  # https://archive.ics.uci.edu/dataset/697
+  uci_dataset_id: 697
+
+  # Ruta de respaldo: si no hay conexión a internet,
+  # el pipeline cargará datos desde este archivo local.
+  local_fallback_path: "data/raw/data.csv"
+
+
+# -----------------------------------------------
+# RUTAS DE DATOS
+# Sigue la convención: raw -> interim -> processed
+# -----------------------------------------------
+paths:
+
+  # Datos originales descargados (nunca se modifican)
+  raw: "data/raw/"
+
+  # Datos limpios pero sin feature engineering
+  interim: "data/interim/"
+
+  # Datos finales listos para entrenar el modelo
+  processed: "data/processed/"
+
+  # Nombres de archivos clave en cada etapa del pipeline
+  cleaned_data:    "data/interim/cleaned_student_data.csv"
+  engineered_data: "data/processed/engineered_student_data.csv"
+
+  # Carpeta donde se guardan los modelos entrenados
+  models: "models/"
+
+  # Nombre del archivo del modelo guardado
+  model_filename: "random_forest_model.joblib"
+
+
+# -----------------------------------------------
+# PREPROCESADO DE DATOS
+# -----------------------------------------------
+preprocessing:
+
+  # Umbral para optimizar tipos de datos en memoria.
+  # Si una columna entera tiene menos de este número
+  # de valores únicos, se convierte a un tipo más ligero.
+  # Ejemplo: una columna con valores 0 y 1 solo tiene
+  # 2 valores únicos — puede guardarse como int8 en vez de int64.
+  dtype_optimization_threshold: 100
+
+  # Columnas a eliminar antes del entrenamiento
+  # (identificadores o columnas redundantes tras el encoding)
+  columns_to_drop:
+    - "target"
+    - "age_at_enrollment"
+
+
+# -----------------------------------------------
+# FEATURE ENGINEERING
+# -----------------------------------------------
+feature_engineering:
+
+  # Definición de los grupos de edad para la nueva variable 'age_group'
+  # Los 'bins' son los límites de cada grupo.
+  # Ejemplo: [17, 21] → estudiantes de 18 a 21 años → "18-21 (Traditional)"
+  age_bins:   [17, 21, 25, 30, 60]
+  age_labels: ["18-21 (Traditional)", "22-25", "26-30", "30+ (Adult Learner)"]
+
+  # Mapeo de la variable objetivo a valores numéricos.
+  # El modelo solo entiende números, no texto como "Graduate".
+  target_mapping:
+    Graduate: 0
+    Dropout:  1
+    Enrolled: 2
+
+
+# -----------------------------------------------
+# ENTRENAMIENTO DEL MODELO
+# -----------------------------------------------
+training:
+
+  # Porcentaje de datos reservados para evaluación (test).
+  # Con 0.2 → 80% de los datos entrenan, 20% evalúan.
+  # Regla general: entre 0.15 y 0.30 para datasets medianos.
+  test_size: 0.2
+
+  # Semilla de aleatoriedad para reproducibilidad.
+  # Con un valor fijo, el resultado es siempre el mismo,
+  # lo que permite comparar modelos de forma justa.
+  # El valor 42 es una convención histórica en la comunidad ML.
+  random_state: 42
+
+  # Nombre de la columna objetivo que el modelo debe predecir.
+  target_column: "target_encoded"
+
+
+# -----------------------------------------------
+# HIPERPARÁMETROS DEL MODELO
+# Random Forest Classifier
+# -----------------------------------------------
+model:
+
+  # Número de árboles de decisión en el bosque.
+  # Más árboles = más precisión, pero más tiempo de entrenamiento.
+  # 100 es un buen punto de partida estándar en la literatura.
+  n_estimators: 100
+
+  # Máxima profundidad de cada árbol (null = sin límite).
+  # Limitar la profundidad ayuda a reducir el overfitting.
+  # null → los árboles crecen libremente (puede causar overfitting).
+  max_depth: null
+
+  # Semilla de aleatoriedad del modelo.
+  # Se mantiene separado de training.random_state para poder
+  # ajustar uno sin afectar al otro durante experimentos.
+  random_state: 42
+
+
+# -----------------------------------------------
+# EVALUACIÓN DEL MODELO
+# -----------------------------------------------
+evaluation:
+
+  # Métrica principal para seleccionar el mejor modelo.
+  # Opciones: "accuracy", "f1_weighted", "recall", "precision"
+  # Para este proyecto usamos "f1_weighted" porque el dataset
+  # puede estar desbalanceado (más Graduates que Dropouts).
+  primary_metric: "f1_weighted"
+
+  # Etiquetas de clase para los informes de evaluación
+  class_names:
+    - "Graduate"
+    - "Dropout"
+    - "Enrolled"
